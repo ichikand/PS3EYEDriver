@@ -1126,7 +1126,9 @@ bool PS3EYECam::open_usb()
 	//libusb_set_configuration(handle_, 0);
 
 	#if defined(__linux__)
-    	libusb_set_auto_detach_kernel_driver(handle_, 1);
+    	if (libusb_kernel_driver_active(handle_, 0) == 1) {
+        	libusb_detach_kernel_driver(handle_, 0);
+    	}
 	#endif
 
 	res = libusb_claim_interface(handle_, 0);
